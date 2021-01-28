@@ -81,6 +81,13 @@ const styles = {
   }
 };
 
+function sanitizedProps(props) {
+  const sanitized = {...props};
+  delete sanitized.styleKeeperContext;
+  delete sanitized.radiumConfigContext;
+  return sanitized;
+}
+
 /**
  * A purple pane header that can have be focused (purple) or unfocused (light purple).
  */
@@ -106,7 +113,7 @@ class PaneHeader extends React.Component {
       ...(isMinecraft && commonStyles.minecraftHeader)
     };
 
-    return <div {...props} style={composedStyle} />;
+    return <div {...sanitizedProps(props)} style={composedStyle} />;
   }
 }
 
@@ -123,7 +130,7 @@ export const PaneSection = Radium(
     render() {
       return (
         <div
-          {...this.props}
+          {...sanitizedProps(this.props)}
           ref={root => (this.root = root)}
           style={{...styles.paneSection, ...this.props.style}}
         />
