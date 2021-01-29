@@ -270,7 +270,7 @@ class Button extends React.Component {
       <Tag
         className={className}
         style={[styles.main, styles.colors[color], sizeStyle, style]}
-        href={disabled ? 'javascript:void(0);' : href}
+        href={disabled ? null : href}
         target={target}
         rel={rel}
         disabled={disabled}
