@@ -29,13 +29,9 @@ import sectionData, {setSection} from '@cdo/apps/redux/sectionDataRedux';
 import scriptSelection from '@cdo/apps/redux/scriptSelectionRedux';
 import isRtl from '@cdo/apps/code-studio/isRtlRedux';
 import NoSectionCodeDialog from '@cdo/apps/templates/manageStudents/NoSectionCodeDialog';
-import {
-  allowConsoleErrors,
-  allowConsoleWarnings
-} from '../../../util/throwOnConsole';
+import {allowConsoleWarnings} from '../../../util/throwOnConsole';
 
 describe('ManageStudentsTable', () => {
-  allowConsoleErrors();
   allowConsoleWarnings();
 
   it('sortRows orders table in the following order: add, newStudent, student', () => {
