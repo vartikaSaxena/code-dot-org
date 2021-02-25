@@ -21,6 +21,7 @@ class MediaProxyController < ApplicationController
       'image/x-windows-bmp',
       'image/gif',
       'image/jpeg',
+      'image/jpg',
       'image/png',
       'image/svg+xml',
       'audio/basic',
