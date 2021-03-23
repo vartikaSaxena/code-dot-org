@@ -679,7 +679,7 @@ class ApiControllerTest < ActionController::TestCase
     }
     assert_response :success
     body = JSON.parse(response.body)
-    assert_equal({}, body)
+    assert_equal({signedIn: false}, body)
     assert_equal(
       [
         {
