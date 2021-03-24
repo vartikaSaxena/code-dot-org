@@ -75,6 +75,7 @@ export function ensureAppInstalled() {
  */
 function listSerialDevices() {
   let SerialPortType;
+  console.log(isChromeOS());
   if (!isChromeOS()) {
     SerialPortType = SerialPort;
     return SerialPortType.list();
