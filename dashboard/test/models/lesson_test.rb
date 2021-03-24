@@ -112,16 +112,16 @@ class LessonTest < ActiveSupport::TestCase
 
   test "last_progression_script_level" do
     lesson = create :lesson
-    create :script_level, lesson: lesson
-    last_script_level = create :script_level, lesson: lesson
+    create :script_level, lesson: lesson, chapter: 1
+    last_script_level = create :script_level, lesson: lesson, chapter: 2
 
     assert_equal last_script_level, lesson.last_progression_script_level
   end
 
   test "last_progression_script_level with a bonus level" do
     lesson = create :lesson
-    last_script_level = create :script_level, lesson: lesson
-    create :script_level, lesson: lesson, bonus: true
+    last_script_level = create :script_level, lesson: lesson, chapter: 1
+    create :script_level, lesson: lesson, chapter: 2, bonus: true
 
     assert_equal last_script_level, lesson.last_progression_script_level
   end
@@ -159,6 +159,36 @@ class LessonTest < ActiveSupport::TestCase
     assert_equal 'Lesson1', summary[:key]
   end
 
+  test 'can summarize lesson with and without lesson plan' do
+    script = create :script, name: 'test-script'
+    lesson_group = create :lesson_group, script: script
+    lesson1 = create :lesson, lesson_group: lesson_group, script: script, has_lesson_plan: true
+    lesson2 = create :lesson, lesson_group: lesson_group, script: script, has_lesson_plan: false
+
+    lesson1_summary = lesson1.summarize
+    lesson2_summary = lesson2.summarize
+    assert_equal '//test.code.org/curriculum/test-script/1/Teacher', lesson1_summary[:lesson_plan_html_url]
+    assert_equal nil, lesson2_summary[:lesson_plan_html_url]
+  end
+
+  test 'can summarize lesson with new lesson plan link in migrated script' do
+    script = create :script, name: 'test-script', is_migrated: true, hidden: true
+    lesson_group = create :lesson_group, script: script
+    lesson1 = create :lesson, lesson_group: lesson_group, script: script, has_lesson_plan: true, lockable: true
+    lesson2 = create :lesson, lesson_group: lesson_group, script: script, has_lesson_plan: false, lockable: true
+    lesson3 = create :lesson, lesson_group: lesson_group, script: script, has_lesson_plan: true, lockable: false
+    lesson4 = create :lesson, lesson_group: lesson_group, script: script, has_lesson_plan: false, lockable: false
+
+    lesson1_summary = lesson1.summarize
+    lesson2_summary = lesson2.summarize
+    lesson3_summary = lesson3.summarize
+    lesson4_summary = lesson4.summarize
+    assert_equal "/s/#{script.name}/lessons/#{lesson1.relative_position}", lesson1_summary[:lesson_plan_html_url]
+    assert_equal nil, lesson2_summary[:lesson_plan_html_url]
+    assert_equal "/s/#{script.name}/lessons/#{lesson3.relative_position}", lesson3_summary[:lesson_plan_html_url]
+    assert_equal nil, lesson4_summary[:lesson_plan_html_url]
+  end
+
   test 'can summarize lesson for lesson plan' do
     script = create :script
     lesson_group = create :lesson_group, script: script
@@ -185,6 +215,135 @@ class LessonTest < ActiveSupport::TestCase
     assert_equal script.summarize_for_lesson_show, summary[:unit]
   end
 
+  test 'can summarize lesson for student lesson plan' do
+    script = create :script
+    lesson_group = create :lesson_group, script: script
+    lesson = create(
+      :lesson,
+      lesson_group: lesson_group,
+      script: script,
+      name: 'Lesson 1',
+      key: 'lesson-1',
+      relative_position: 1,
+      absolute_position: 1,
+      properties: {
+        student_overview: 'lesson overview',
+        purpose: 'learning',
+        preparation: 'do things'
+      }
+    )
+
+    summary = lesson.summarize_for_student_lesson_plan
+    assert_equal 'lesson-1', summary[:key]
+    assert_equal 'lesson overview', summary[:overview]
+    assert_equal script.summarize_for_lesson_show(true), summary[:unit]
+  end
+
+  test 'summarize lesson for student lesson plan does not include teacher announcements' do
+    script = create :script
+    lesson_group = create :lesson_group, script: script
+    lesson = create(
+      :lesson,
+      lesson_group: lesson_group,
+      script: script,
+      name: 'Lesson 1',
+      key: 'lesson-1',
+      relative_position: 1,
+      absolute_position: 1,
+      properties: {
+        student_overview: 'lesson overview',
+        purpose: 'learning',
+        preparation: 'do things',
+        announcements: [
+          {
+            notice: 'Notice - Teacher',
+            details: 'Teachers are the best',
+            link: '/foo/bar/teacher',
+            type: 'information',
+            visibility: 'Teacher-only'
+          },
+          {
+            notice: 'Notice - Student',
+            details: 'Students are the best',
+            link: '/foo/bar/student',
+            type: 'information',
+            visibility: 'Student-only'
+          },
+          {
+            notice: 'Notice - Student and Teacher',
+            details: 'Students and teachers are the best',
+            link: '/foo/bar/all',
+            type: 'information',
+            visibility: 'Teacher and student'
+          },
+        ]
+      }
+    )
+
+    summary = lesson.summarize_for_student_lesson_plan
+    assert_equal 'lesson-1', summary[:key]
+    assert_equal 'lesson overview', summary[:overview]
+    assert_equal 2, summary[:announcements].length
+    assert_equal script.summarize_for_lesson_show(true), summary[:unit]
+  end
+
+  test 'summarize lesson for student lesson plan combines student and for all resources' do
+    script = create :script
+    lesson_group = create :lesson_group, script: script
+    lesson = create(
+      :lesson,
+      lesson_group: lesson_group,
+      script: script,
+      name: 'Lesson 1',
+      key: 'lesson-1',
+      relative_position: 1,
+      absolute_position: 1,
+      properties: {
+        student_overview: 'lesson overview',
+        purpose: 'learning',
+        preparation: 'do things'
+      }
+    )
+    create :resource, name: 'teacher resource', audience: 'Teacher', lessons: [lesson]
+    create :resource, name: 'verified teacher resource', audience: 'Verified Teacher', lessons: [lesson]
+    create :resource, name: 'student resource', audience: 'Student', lessons: [lesson]
+    create :resource, name: 'all resource', audience: 'All', lessons: [lesson]
+
+    summary = lesson.summarize_for_student_lesson_plan
+    assert_equal 'lesson-1', summary[:key]
+    assert_equal 'lesson overview', summary[:overview]
+    assert_equal 2, summary[:resources].length
+    assert_equal script.summarize_for_lesson_show(true), summary[:unit]
+  end
+
+  test 'lesson edit summary does not preprocess markdown' do
+    lesson = create :lesson, lesson_group: create(:lesson_group)
+    Services::MarkdownPreprocessor.expects(:process!).never
+    lesson.summarize_for_lesson_edit
+  end
+
+  test 'lesson show summary preprocesses markdown' do
+    lesson = create(
+      :lesson,
+      assessment_opportunities: 'example assessment opportunities',
+      lesson_group: create(:lesson_group),
+      overview: 'example overview',
+      preparation: 'example preparation',
+      purpose: 'example purpose'
+    )
+
+    Services::MarkdownPreprocessor.expects(:process).
+      with(lesson.overview)
+    Services::MarkdownPreprocessor.expects(:process).
+      with(lesson.purpose)
+    Services::MarkdownPreprocessor.expects(:process).
+      with(lesson.preparation)
+    Services::MarkdownPreprocessor.expects(:process).
+      with(lesson.assessment_opportunities)
+
+    lesson.summarize_for_lesson_show(create(:user))
+  end
+
   test 'can summarize lesson for lesson plan dropdown' do
     script = create :script
     lesson_group = create :lesson_group, script: script
@@ -192,7 +351,18 @@ class LessonTest < ActiveSupport::TestCase
 
     summary = lesson.summarize_for_lesson_dropdown
     assert_equal 'lesson-1', summary[:key]
-    assert_equal "/lessons/#{lesson.id}", summary[:link]
+    assert_equal "/s/#{script.name}/lessons/#{lesson.relative_position}", summary[:link]
+    assert_equal 1, summary[:position]
+  end
+
+  test 'can summarize lesson for student lesson plan dropdown' do
+    script = create :script
+    lesson_group = create :lesson_group, script: script
+    lesson = create :lesson, lesson_group: lesson_group, script: script, name: 'Lesson 1', key: 'lesson-1', relative_position: 1, absolute_position: 1
+
+    summary = lesson.summarize_for_lesson_dropdown(true)
+    assert_equal 'lesson-1', summary[:key]
+    assert_equal "/s/#{script.name}/lessons/#{lesson.relative_position}/student", summary[:link]
     assert_equal 1, summary[:position]
   end
 
@@ -211,6 +381,36 @@ class LessonTest < ActiveSupport::TestCase
     assert_equal 2, levels_data.length
     refute levels_data.first[:bonus]
     assert levels_data.last[:bonus]
+  end
+
+  test 'summarize uses unplugged property' do
+    script = create :script, is_migrated: true, hidden: true
+    lesson_group = create :lesson_group, script: script
+    lesson = create :lesson, lesson_group: lesson_group, script: script, name: 'Lesson 1', key: 'lesson-1', relative_position: 1, absolute_position: 1, unplugged: true
+
+    levels_data = lesson.summarize
+    assert levels_data[:unplugged]
+  end
+
+  test 'summarize_for_calendar adds durations of all activities' do
+    script = create :script, is_migrated: false, hidden: true
+    lesson_group = create :lesson_group, script: script
+    lesson = create :lesson, lesson_group: lesson_group, script: script, name: 'Lesson 1', key: 'lesson-1', relative_position: 1, absolute_position: 1, unplugged: true
+    activity1 = create :lesson_activity, lesson: lesson, duration: 20
+    section1 = create :activity_section, lesson_activity: activity1
+    level1 = create :level
+    create :script_level, script: script, lesson: lesson, activity_section: section1, activity_section_position: 1, levels: [level1]
+    activity2 = create :lesson_activity, lesson: lesson, duration: 10
+    section2 = create :activity_section, lesson_activity: activity2
+    level2 = create :level
+    create :script_level, script: script, lesson: lesson, activity_section: section2, activity_section_position: 2, levels: [level2]
+    activity3 = create :lesson_activity, lesson: lesson, duration: nil
+    section3 = create :activity_section, lesson_activity: activity3
+    level3 = create :level
+    create :script_level, script: script, lesson: lesson, activity_section: section3, activity_section_position: 3, levels: [level3]
+
+    levels_data = lesson.summarize_for_calendar
+    assert_equal 30, levels_data[:duration]
   end
 
   test 'raises error when creating invalid lockable lessons' do
@@ -250,6 +450,7 @@ class LessonTest < ActiveSupport::TestCase
       {
         key: "L1",
         name: "Lesson 1",
+        has_lesson_plan: true,
         script_levels: [
           {levels: [{name: "Level1"}]},
           {levels: [{name: "Level2"}]}
@@ -258,6 +459,7 @@ class LessonTest < ActiveSupport::TestCase
       {
         key: "L2",
         name: "Lesson 2",
+        has_lesson_plan: false,
         script_levels: [
           {levels: [{name: "Level3"}]}
         ]
@@ -266,8 +468,18 @@ class LessonTest < ActiveSupport::TestCase
         key: "L3",
         name: "Lesson 3",
         lockable: true,
+        has_lesson_plan: false,
         script_levels: [
           {levels: [{name: "Level3"}], assessment: true}
+        ]
+      },
+      {
+        key: "L4",
+        name: "Lesson 4",
+        lockable: true,
+        has_lesson_plan: true,
+        script_levels: [
+          {levels: [{name: "Level4"}], assessment: true}
         ]
       }
     ]
@@ -275,28 +487,34 @@ class LessonTest < ActiveSupport::TestCase
 
     lessons = Lesson.add_lessons(script, lesson_group, raw_lessons, counters, nil, nil)
 
-    assert_equal ['L1', 'L2', 'L3'], lessons.map(&:key)
-    assert_equal ['Lesson 1', 'Lesson 2', 'Lesson 3'], lessons.map(&:name)
-    assert_equal [1, 2, 3], lessons.map(&:absolute_position)
-    assert_equal [1, 2, 1], lessons.map(&:relative_position)
+    assert_equal ['L1', 'L2', 'L3', 'L4'], lessons.map(&:key)
+    assert_equal ['Lesson 1', 'Lesson 2', 'Lesson 3', 'Lesson 4'], lessons.map(&:name)
+    assert_equal [1, 2, 3, 4], lessons.map(&:absolute_position)
+    assert_equal [1, 2, 1, 3], lessons.map(&:relative_position)
     assert_equal lesson_group, lessons[0].lesson_group
     assert_equal 2, lessons[0].script_levels.count
     assert_equal 1, lessons[1].script_levels.count
     assert_equal 1, lessons[2].script_levels.count
     assert_equal true, lessons[2].lockable
-    assert_equal LessonGroup::Counters.new(1, 2, 3, 4), counters
+    assert_equal true, lessons[3].lockable
+    assert_equal true, lessons[3].has_lesson_plan
+    assert_equal LessonGroup::Counters.new(3, 1, 4, 5), counters
   end
 
   test 'i18n_hash has correct value' do
     script = create :script, name: 'dummy-script'
     lesson_group = create :lesson_group, script: script
     lesson = create :lesson, lesson_group: lesson_group, script: script, key: 'dummy-key', name: 'Dummy Name'
+    lesson.student_overview = 'student overview'
+    lesson.overview = 'teacher overview'
 
     expected_i18n = {
       'dummy-script' => {
         'lessons' => {
           'dummy-key' => {
-            'name' => 'Dummy Name'
+            'name' => 'Dummy Name',
+            'description_student' => 'student overview',
+            'description_teacher' => 'teacher overview'
           }
         }
       }
@@ -569,6 +787,45 @@ class LessonTest < ActiveSupport::TestCase
     create :resource, name: 'verified teacher resource', audience: 'Verified Teacher', lessons: [lesson]
     assert_equal 2, lesson.resources_for_lesson_plan(true)['Teacher'].count
     assert_equal 1, lesson.resources_for_lesson_plan(false)['Teacher'].count
+  end
+
+  test 'lesson_plan_pdf_url supports new lesson plan PDFs' do
+    old_lesson = create :lesson
+    assert_equal(
+      old_lesson.lesson_plan_pdf_url,
+      "//test.code.org/curriculum/#{old_lesson.script.name}/1/Teacher.pdf"
+    )
+
+    script = create :script, is_migrated: true, hidden: true
+    new_lesson = create :lesson, script: script, key: 'Some Verbose Lesson Name', has_lesson_plan: true
+    assert_nil(new_lesson.lesson_plan_pdf_url)
+
+    script.seeded_from = Time.now.to_s
+    assert_equal(
+      new_lesson.lesson_plan_pdf_url,
+      "https://lesson-plans.code.org/#{script.name}/#{Time.parse(script.seeded_from).to_s(:number)}/Some Verbose Lesson Name.pdf"
+    )
+  end
+
+  test 'student_lesson_plan_pdf_url gets url for migrated script with student lesson plans' do
+    script = create :script, is_migrated: true, hidden: true, include_student_lesson_plans: true
+    new_lesson = create :lesson, script: script, key: 'Some Verbose Lesson Name', has_lesson_plan: true
+    assert_nil(new_lesson.student_lesson_plan_pdf_url)
+
+    script.seeded_from = Time.now.to_s
+    assert_equal(
+      new_lesson.student_lesson_plan_pdf_url,
+      "https://lesson-plans.code.org/#{script.name}/#{Time.parse(script.seeded_from).to_s(:number)}/student/Some Verbose Lesson Name.pdf"
+    )
+  end
+
+  test 'no student_lesson_plan_pdf_url for non-migrated scripts' do
+    script = create :script, include_student_lesson_plans: true
+    new_lesson = create :lesson, script: script, key: 'Some Verbose Lesson Name', has_lesson_plan: true
+    assert_nil(new_lesson.student_lesson_plan_pdf_url)
+
+    script.seeded_from = Time.now.to_s
+    assert_nil(new_lesson.student_lesson_plan_pdf_url)
   end
 
   def create_swapped_lockable_lesson

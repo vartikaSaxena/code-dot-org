@@ -109,6 +109,7 @@ ms:
               name: Simpang Siur
             Wrap-up:
               name: Wrap-up
+          student_description: Kursus 20 jam ini memperkenalkan asas Sains komputer dan konsep programming. Kursus ini direka untuk kegunaan di bilik darjah bagi gred K-8, tetapi ia adalah menyeronokkan untuk belajar di semua peringkat umur.
         edit-code:
           title: Edit kod
           description: Edit kod
@@ -118,6 +119,7 @@ ms:
               name: Pelukis
             The Maze:
               name: Simpang Siur
+          student_description: Edit kod
         events:
           title: Acara-acara
           description: Acara-acara
@@ -125,12 +127,14 @@ ms:
           lessons:
             Bounce:
               name: Lantunan
+          student_description: Acara-acara
         flappy:
           title: Kod Flappy
           description: ingin menulis permainan anda sendiri dalam masa kurang dari 10 minit? Cuba tutorial kod Flappy kami!
           lessons:
             Flappy Code:
               name: Kod Flappy
+          student_description: ingin menulis permainan anda sendiri dalam masa kurang dari 10 minit? Cuba tutorial kod Flappy kami!
         cspunit1:
           lessons:
             Sending Numbers:
@@ -894,6 +898,16 @@ ms:
           description_short: 'Gunakan Makmal Jin untuk memprogramkan simulasi wabak virus.'
           description: 'Gunakan Makmal Jin untuk memprogramkan simulasi wabak virus.'
           name: wabak
+          student_description: 'Gunakan Makmal Jin untuk memprogramkan simulasi wabak virus.'
+        2021drafting:
+          lessons:
+            Virus Simulation for Code Bytes:
+              name: Mengekod Simulasi
+          lesson_groups:
+            lessonGroup-3:
+              display_name: Pembolehubah
+            outbreak:
+              display_name: Simulasi Wabak
         csd3-2021:
           lessons:
             Variables:
@@ -973,8 +987,12 @@ ms:
             Conditionals:
               key: Bersyarat
           lesson_groups:
+            ramp_up:
+              display_name: Gelung
             csf_sprites:
               display_name: Jin
+            csf_nested_loops:
+              display_name: Bersyarat
             csf_functions:
               display_name: Fungsi
         coursef-2021:
@@ -983,14 +1001,18 @@ ms:
               key: Internet
               name: Internet
           lesson_groups:
-            csf_variables:
-              display_name: Pembolehubah
-            csf_sprites:
+            ramp_up:
               display_name: Jin
+            lessonGroup-8:
+              display_name: Pembolehubah
+            lessonGroup-9:
+              display_name: alihkan
         express-2021:
           lessons:
             Dance Party:
               key: Majlis Tari-Menari
+              name: Majlis Tari-Menari
+            lesson-1:
               name: Majlis Tari-Menari
           lesson_groups:
             csf_loops:
@@ -1018,3 +1040,28 @@ ms:
               display_name: Simulasi Wabak
             lessonGroup-3:
               display_name: Pembolehubah
+            Sprites:
+              display_name: Jin
+            variables:
+              display_name: Pembolehubah
+        contagion-pilot:
+          description_short: 'Gunakan Makmal Jin untuk memprogramkan simulasi wabak virus.'
+          description: 'Gunakan Makmal Jin untuk memprogramkan simulasi wabak virus.'
+          student_description: 'Gunakan Makmal Jin untuk memprogramkan simulasi wabak virus.'
+        k5-onlinepd-2021:
+          lessons:
+            Loops:
+              key: Gelung
+              name: Gelung
+            Events:
+              key: Acara-acara
+              name: Acara-acara
+            Conditionals:
+              key: Bersyarat
+              name: Bersyarat
+            Functions:
+              key: Fungsi
+              name: Fungsi
+            Variables:
+              key: Pembolehubah
+              name: Pembolehubah

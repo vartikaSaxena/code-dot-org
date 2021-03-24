@@ -515,6 +515,71 @@ class ScriptsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test 'can update migrated script containing migrated script levels' do
+    sign_in @levelbuilder
+    Rails.application.config.stubs(:levelbuilder_mode).returns true
+
+    script = create :script, name: 'migrated', is_migrated: true, hidden: true
+    lesson_group = create :lesson_group, script: script
+    lesson = create :lesson, script: script, lesson_group: lesson_group
+    activity = create :lesson_activity, lesson: lesson
+    section = create :activity_section, lesson_activity: activity
+
+    # A migrated script level is one with an activity section.
+    create(
+      :script_level,
+      script: script,
+      lesson: lesson,
+      activity_section: section,
+      activity_section_position: 1,
+      levels: [create(:applab)]
+    )
+
+    stub_file_writes(script.name)
+
+    post :update, params: {
+      id: script.id,
+      script: {name: script.name},
+      is_migrated: true,
+      script_text: ScriptDSL.serialize_lesson_groups(script),
+    }
+    assert_response :success
+    assert script.is_migrated
+    assert script.script_levels.any?
+  end
+
+  test 'cannot update migrated script containing legacy script levels' do
+    sign_in @levelbuilder
+    Rails.application.config.stubs(:levelbuilder_mode).returns true
+
+    script = create :script, name: 'migrated', is_migrated: true, hidden: true
+    lesson_group = create :lesson_group, script: script
+    lesson = create :lesson, script: script, lesson_group: lesson_group, name: 'problem lesson'
+
+    # A legacy script level is one without an activity section.
+    create(
+      :script_level,
+      script: script,
+      lesson: lesson,
+      levels: [create(:applab)]
+    )
+
+    stub_file_writes(script.name)
+
+    post :update, params: {
+      id: script.id,
+      script: {name: script.name},
+      is_migrated: true,
+      script_text: ScriptDSL.serialize_lesson_groups(script),
+    }
+
+    assert_response :not_acceptable
+    msg = 'Legacy script levels are not allowed in migrated scripts. Problem lessons: [\"problem lesson\"]'
+    assert_includes response.body, msg
+    assert script.is_migrated
+    assert script.script_levels.any?
+  end
+
   test 'updates teacher resources' do
     sign_in @levelbuilder
     Rails.application.config.stubs(:levelbuilder_mode).returns true
@@ -659,7 +724,6 @@ class ScriptsControllerTest < ActionController::TestCase
       student_detail_progress_view: 'on',
       lesson_extras_available: 'on',
       has_verified_resources: 'on',
-      has_lesson_plan: 'on',
       is_stable: 'on',
       tts: 'on',
       project_sharing: 'on',
@@ -709,9 +773,7 @@ class ScriptsControllerTest < ActionController::TestCase
     assert_response :success
     script.reload
 
-    # peer_reviews_to_complete gets converted to an int by general_params in scripts_controller, so it becomes 0
-    expected = {"peer_reviews_to_complete" => 0}
-    assert_equal expected, script.properties
+    assert_equal({}, script.properties)
   end
 
   test 'add lesson to script' do
@@ -778,45 +840,6 @@ class ScriptsControllerTest < ActionController::TestCase
     params: -> {{id: @pilot_script.name}}, name: 'levelbuilder can view pilot script'
   ) do
     refute response.body.include? no_access_msg
-  end
-
-  test 'can create with has_lesson_plan param' do
-    sign_in @levelbuilder
-    Rails.application.config.stubs(:levelbuilder_mode).returns true
-
-    File.stubs(:write)
-
-    post :create, params: {
-      script: {name: 'test-script-create'},
-      script_text: '',
-      visible_to_teachers: true,
-      has_lesson_plan: true,
-    }
-
-    script = Script.find_by_name('test-script-create')
-    assert_equal 'test-script-create', script.name
-    assert script.has_lesson_plan?
-  end
-
-  test 'can update with has_lesson_plan param' do
-    sign_in @levelbuilder
-    Rails.application.config.stubs(:levelbuilder_mode).returns true
-
-    script = create :script
-    refute script.has_lesson_plan?
-
-    File.stubs(:write)
-
-    post :update, params: {
-      id: script.id,
-      script: {name: script.name},
-      script_text: '',
-      has_lesson_plan: true,
-    }
-
-    # Reload script, expect change
-    script = Script.find_by_id(script.id)
-    assert script.has_lesson_plan?
   end
 
   test 'should redirect to latest stable version in script family for student without progress or assignment' do

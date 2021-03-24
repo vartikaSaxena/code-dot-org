@@ -54,7 +54,6 @@ export default function initPage(scriptEditorData) {
         initialLessonExtrasAvailable={!!scriptData.lesson_extras_available}
         initialLessonLevelData={lessonLevelData}
         initialHasVerifiedResources={scriptData.has_verified_resources}
-        initialHasLessonPlan={scriptData.has_lesson_plan}
         initialCurriculumPath={scriptData.curriculum_path || ''}
         initialPilotExperiment={scriptData.pilot_experiment}
         initialEditorExperiment={scriptData.editor_experiment || ''}
@@ -75,7 +74,13 @@ export default function initPage(scriptEditorData) {
         initialIsCourse={scriptData.is_course}
         hasCourse={scriptEditorData.has_course}
         initialShowCalendar={scriptData.showCalendar}
+        initialWeeklyInstructionalMinutes={
+          scriptData.weeklyInstructionalMinutes
+        }
         isMigrated={scriptData.is_migrated}
+        initialIncludeStudentLessonPlans={
+          scriptData.includeStudentLessonPlans || false
+        }
       />
     </Provider>,
     document.querySelector('.edit_container')

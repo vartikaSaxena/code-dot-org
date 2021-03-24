@@ -225,6 +225,7 @@ az:
         options:
           PROPERTY:
             '"scale"': ölçü
+            '"speed"': sürət
       gamelab_checkTouching:
         options:
           CONDITION:
@@ -234,6 +235,7 @@ az:
         options:
           PROPERTY:
             '"scale"': ölçü
+            '"speed"': sürət
       gamelab_getTime:
         options:
           UNIT:
@@ -285,6 +287,7 @@ az:
         options:
           PROPERTY:
             '"scale"': ölçü
+            '"speed"': sürət
       gamelab_setSizes:
         options:
           PROPERTY:

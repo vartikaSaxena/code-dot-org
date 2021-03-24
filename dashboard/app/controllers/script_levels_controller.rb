@@ -80,6 +80,9 @@ class ScriptLevelsController < ApplicationController
     authorize! :read, ScriptLevel
     @script = ScriptLevelsController.get_script(request)
 
+    # will be true if the user is in any unarchived section where tts autoplay is enabled
+    @tts_autoplay_enabled = current_user&.sections_as_student&.where({hidden: false})&.map(&:tts_autoplay_enabled)&.reduce(false, :|)
+
     # @view_as_user is used to determine redirect path for bubble choice levels
     view_as_other = params[:user_id] && current_user && params[:user_id] != current_user.id
     @view_as_user = view_as_other ? User.find(params[:user_id]) : current_user
@@ -228,7 +231,7 @@ class ScriptLevelsController < ApplicationController
     return head :not_found if ScriptConstants::FAMILY_NAMES.include?(params[:script_id])
 
     @script = Script.get_from_cache(params[:script_id])
-    @stage = @script.stage_by_relative_position(params[:stage_position].to_i)
+    @stage = @script.lesson_by_relative_position(params[:stage_position].to_i)
 
     if params[:id]
       @script_level = Script.cache_find_script_level params[:id]
@@ -244,7 +247,7 @@ class ScriptLevelsController < ApplicationController
       return
     end
 
-    @stage = Script.get_from_cache(params[:script_id]).stage_by_relative_position(params[:stage_position].to_i)
+    @stage = Script.get_from_cache(params[:script_id]).lesson_by_relative_position(params[:stage_position].to_i)
     @script = @stage.script
     @stage_extras = {
       next_stage_number: @stage.next_level_number_for_lesson_extras(current_user),
@@ -267,9 +270,9 @@ class ScriptLevelsController < ApplicationController
 
     stage =
       if params[:stage_position]
-        script.stage_by_relative_position(params[:stage_position])
+        script.lesson_by_relative_position(params[:stage_position])
       else
-        script.stage_by_relative_position(params[:lockable_stage_position], true)
+        script.lesson_by_relative_position(params[:lockable_stage_position], true)
       end
 
     render json: stage.summary_for_lesson_plans
@@ -485,7 +488,8 @@ class ScriptLevelsController < ApplicationController
       is_bonus_level: @script_level.bonus,
       useGoogleBlockly: params[:blocklyVersion] == "Google",
       azure_speech_service_voices: azure_speech_service_options[:voices],
-      authenticity_token: form_authenticity_token
+      authenticity_token: form_authenticity_token,
+      disallowed_html_tags: disallowed_html_tags
     )
     readonly_view_options if @level.channel_backed? && params[:version]
 

@@ -40,6 +40,8 @@ class Script < ApplicationRecord
   has_many :script_levels, through: :lessons
   has_many :levels_script_levels, through: :script_levels # needed for seeding logic
   has_many :levels, through: :script_levels
+  has_and_belongs_to_many :resources, join_table: :scripts_resources
+  has_many :scripts_resources
   has_many :users, through: :user_scripts
   has_many :user_scripts
   has_many :hint_view_requests
@@ -84,11 +86,14 @@ class Script < ApplicationRecord
             {lesson_activities: :activity_sections},
             :resources,
             :vocabularies,
-            :objectives
+            :programming_expressions,
+            :objectives,
+            :standards
           ]
         },
         :script_levels,
-        :levels
+        :levels,
+        :resources
       ]
     )
   end
@@ -114,6 +119,16 @@ class Script < ApplicationRecord
 
   validate :set_is_migrated_only_for_migrated_scripts
 
+  def prevent_duplicate_levels
+    reload
+
+    unless levels.count == levels.uniq.count
+      levels_by_key = levels.map(&:key).group_by {|key| key}
+      duplicate_keys = levels_by_key.select {|_key, values| values.count > 1}.keys
+      raise "duplicate levels detected: #{duplicate_keys.to_json}"
+    end
+  end
+
   include SerializedProperties
 
   after_save :generate_plc_objects
@@ -124,6 +139,10 @@ class Script < ApplicationRecord
     if !!is_migrated && !hidden
       errors.add(:is_migrated, "Can't be set on a course that is visible")
     end
+  end
+
+  def prevent_course_version_change?
+    lessons.any? {|l| l.resources.count > 0 || l.vocabularies.count > 0}
   end
 
   def self.script_directory
@@ -163,9 +182,15 @@ class Script < ApplicationRecord
     end
   end
 
-  # is_course - true if this Script/Unit is intended to be the root of a CourseOffering version. Used during seeding
-  #   to create the appropriate CourseVersion and CourseOffering objects. For example, this should be true for
-  #   CourseA-CourseF .script files.
+  # is_course - true if this Script/Unit is intended to be the root of a
+  #   CourseOffering version.  Used during seeding to create the appropriate
+  #   CourseVersion and CourseOffering objects. For example, this should be
+  #   true for CourseA-CourseF .script files.
+  # seeded_from - a timestamp indicating when this object was seeded from
+  #   its script_json file, as determined by the serialized_at value within
+  #   said json.  Expect this to be nil on levelbulider, since those objects
+  #   are created, not seeded. Used by the staging build to identify when a
+  #   script is being updated, so we can regenerate PDFs.
   serialized_attrs %w(
     hideable_lessons
     peer_reviews_to_complete
@@ -177,7 +202,6 @@ class Script < ApplicationRecord
     teacher_resources
     lesson_extras_available
     has_verified_resources
-    has_lesson_plan
     curriculum_path
     announcements
     version_year
@@ -191,7 +215,10 @@ class Script < ApplicationRecord
     is_course
     background
     show_calendar
+    weekly_instructional_minutes
+    include_student_lesson_plans
     is_migrated
+    seeded_from
   )
 
   def self.twenty_hour_script
@@ -256,6 +283,14 @@ class Script < ApplicationRecord
 
   def self.maker_unit_scripts
     visible_scripts.select {|s| s.family_name == 'csd6'}
+  end
+
+  def self.text_to_speech_script_ids
+    all_scripts.select(&:text_to_speech_enabled?).pluck(:id)
+  end
+
+  def self.pre_reader_script_ids
+    all_scripts.select(&:pre_reader_tts_level?).pluck(:id)
   end
 
   # Get the set of scripts that are valid for the current user, ignoring those
@@ -336,10 +371,14 @@ class Script < ApplicationRecord
     candidate_level
   end
 
-  # Find the lockable or non-locakble stage based on its relative position.
-  # Raises `ActiveRecord::RecordNotFound` if no matching stage is found.
-  def stage_by_relative_position(position, lockable = false)
-    lessons.where(lockable: lockable).find_by!(relative_position: position)
+  # Find the lesson based on its relative position, lockable value, and if it has a lesson plan.
+  # Raises `ActiveRecord::RecordNotFound` if no matching lesson is found.
+  def lesson_by_relative_position(position, unnumbered_lesson = false)
+    if unnumbered_lesson
+      lessons.where(lockable: true, has_lesson_plan: false).find_by!(relative_position: position)
+    else
+      lessons.where(lockable: false).or(lessons.where(has_lesson_plan: true)).find_by!(relative_position: position)
+    end
   end
 
   # For all scripts, cache all related information (levels, etc),
@@ -784,6 +823,10 @@ class Script < ApplicationRecord
     under_curriculum_umbrella?('CSP')
   end
 
+  def csa?
+    under_curriculum_umbrella?('CSA')
+  end
+
   def cs_in_a?
     name.match(Regexp.union('algebra', 'Algebra'))
   end
@@ -823,7 +866,7 @@ class Script < ApplicationRecord
     script_levels.find(id: script_level_id.to_i)
   end
 
-  def get_script_level_by_relative_position_and_puzzle_position(relative_position, puzzle_position, lockable)
+  def get_script_level_by_relative_position_and_puzzle_position(relative_position, puzzle_position, unnumbered_lesson)
     relative_position ||= 1
     script_levels.find do |sl|
       # make sure we are checking the native properties of the script level
@@ -831,7 +874,7 @@ class Script < ApplicationRecord
       sl.position == puzzle_position.to_i &&
         !sl.bonus &&
         sl.lesson.relative_position == relative_position.to_i &&
-        sl.lesson.lockable? == lockable
+        (unnumbered_lesson == !sl.lesson.numbered_lesson?)
     end
   end
 
@@ -855,6 +898,25 @@ class Script < ApplicationRecord
     @all_bonus_script_levels.select {|stage| stage[:stageNumber] <= current_stage.absolute_position}
   end
 
+  def pre_reader_tts_level?
+    [
+      Script::COURSEA_DRAFT_NAME,
+      Script::COURSEB_DRAFT_NAME,
+      Script::COURSEA_NAME,
+      Script::COURSEB_NAME,
+      Script::PRE_READER_EXPRESS_NAME,
+      Script::COURSEA_2018_NAME,
+      Script::COURSEB_2018_NAME,
+      Script::PRE_READER_EXPRESS_2018_NAME,
+      Script::COURSEA_2019_NAME,
+      Script::COURSEB_2019_NAME,
+      Script::PRE_READER_EXPRESS_2019_NAME,
+      Script::COURSEA_2020_NAME,
+      Script::COURSEB_2020_NAME,
+      Script::PRE_READER_EXPRESS_2020_NAME,
+    ].include?(name)
+  end
+
   def text_to_speech_enabled?
     tts?
   end
@@ -876,12 +938,6 @@ class Script < ApplicationRecord
     if has_banner?
       "banner_#{name}.jpg"
     end
-  end
-
-  def has_lesson_pdf?
-    return false if ScriptConstants.script_in_category?(:csf, name) || ScriptConstants.script_in_category?(:csf_2018, name)
-
-    has_lesson_plan?
   end
 
   def has_banner?
@@ -994,10 +1050,25 @@ class Script < ApplicationRecord
       script.prevent_duplicate_lesson_groups(raw_lesson_groups)
       Script.prevent_some_lessons_in_lesson_groups_and_some_not(raw_lesson_groups)
 
+      # More all lessons into a temporary lesson group so that we do not delete
+      # the lesson entries unless the lesson has been entirely removed from the
+      # script
+      temp_lg = LessonGroup.create!(
+        key: 'temp-will-be-deleted',
+        script: script,
+        user_facing: false,
+        position: script.lesson_groups.length + 1
+      )
+      script.lessons.each do |l|
+        l.lesson_group = temp_lg
+        l.save!
+      end
+
       temp_lgs = LessonGroup.add_lesson_groups(raw_lesson_groups, script, new_suffix, editor_experiment)
       script.reload
       script.lesson_groups = temp_lgs
       script.save!
+      script.prevent_legacy_script_levels_in_migrated_scripts
 
       script.generate_plc_objects
 
@@ -1031,6 +1102,13 @@ class Script < ApplicationRecord
     end
   end
 
+  def prevent_legacy_script_levels_in_migrated_scripts
+    if is_migrated && script_levels.reject(&:activity_section).any?
+      lesson_names = lessons.all.select {|l| l.script_levels.reject(&:activity_section).any?}.map(&:name)
+      raise "Legacy script levels are not allowed in migrated scripts. Problem lessons: #{lesson_names.to_json}"
+    end
+  end
+
   # Script levels unfortunately have 3 position values:
   # 1. chapter: position within the Script
   # 2. position: position within the Lesson
@@ -1039,9 +1117,8 @@ class Script < ApplicationRecord
   # values of position and chapter on all script levels in the script.
   def fix_script_level_positions
     reload
-    if script_levels.reject(&:activity_section).any?
-      raise "cannot fix position of legacy script levels"
-    end
+    raise 'cannot fix script level positions on non-migrated scripts' unless is_migrated
+    prevent_legacy_script_levels_in_migrated_scripts
 
     chapter = 0
     lessons.each do |lesson|
@@ -1055,6 +1132,27 @@ class Script < ApplicationRecord
           end
         end
       end
+    end
+  end
+
+  # Lessons unfortunately have 2 position values:
+  # 1. absolute_position: position within the script (used to order lessons with in lesson groups in correct order)
+  # 2. relative_position: position within the Script relative other numbered/unnumbered lessons
+  # This method updates the position values for all lessons in a script after
+  # a lesson is saved
+  def fix_lesson_positions
+    reload
+
+    total_count = 1
+    numbered_lesson_count = 1
+    unnumbered_lesson_count = 1
+    lessons.each do |lesson|
+      lesson.absolute_position = total_count
+      lesson.relative_position = lesson.numbered_lesson? ? numbered_lesson_count : unnumbered_lesson_count
+      lesson.save!
+
+      total_count += 1
+      lesson.numbered_lesson? ? (numbered_lesson_count += 1) : (unnumbered_lesson_count += 1)
     end
   end
 
@@ -1142,22 +1240,20 @@ class Script < ApplicationRecord
   def update_text(script_params, script_text, metadata_i18n, general_params)
     script_name = script_params[:name]
     begin
-      transaction do
-        script_data, i18n = ScriptDSL.parse(script_text, 'input', script_name)
-        Script.add_script(
-          {
-            name: script_name,
-            hidden: general_params[:hidden].nil? ? true : general_params[:hidden], # default true
-            login_required: general_params[:login_required].nil? ? false : general_params[:login_required], # default false
-            wrapup_video: general_params[:wrapup_video],
-            family_name: general_params[:family_name].presence ? general_params[:family_name] : nil, # default nil
-            properties: Script.build_property_hash(general_params)
-          },
-          script_data[:lesson_groups]
-        )
-        if Rails.application.config.levelbuilder_mode
-          Script.merge_and_write_i18n(i18n, script_name, metadata_i18n)
-        end
+      script_data, i18n = ScriptDSL.parse(script_text, 'input', script_name)
+      Script.add_script(
+        {
+          name: script_name,
+          hidden: general_params[:hidden].nil? ? true : general_params[:hidden], # default true
+          login_required: general_params[:login_required].nil? ? false : general_params[:login_required], # default false
+          wrapup_video: general_params[:wrapup_video],
+          family_name: general_params[:family_name].presence ? general_params[:family_name] : nil, # default nil
+          properties: Script.build_property_hash(general_params)
+        },
+        script_data[:lesson_groups]
+      )
+      if Rails.application.config.levelbuilder_mode
+        Script.merge_and_write_i18n(i18n, script_name, metadata_i18n)
       end
     rescue StandardError => e
       errors.add(:base, e.to_s)
@@ -1329,7 +1425,6 @@ class Script < ApplicationRecord
       teacher_resources: teacher_resources,
       lesson_extras_available: lesson_extras_available,
       has_verified_resources: has_verified_resources?,
-      has_lesson_plan: has_lesson_plan?,
       curriculum_path: curriculum_path,
       announcements: announcements,
       age_13_required: logged_out_age_13_required?,
@@ -1352,7 +1447,9 @@ class Script < ApplicationRecord
       background: background,
       is_migrated: is_migrated?,
       scriptPath: script_path(self),
-      showCalendar: show_calendar
+      showCalendar: is_migrated ? show_calendar : false, #prevent calendar from showing for non-migrated scripts for now
+      weeklyInstructionalMinutes: weekly_instructional_minutes,
+      includeStudentLessonPlans: is_migrated ? include_student_lesson_plans : false
     }
 
     #TODO: lessons should be summarized through lesson groups in the future
@@ -1363,6 +1460,7 @@ class Script < ApplicationRecord
     summary[:lessons] = filtered_lessons.map {|lesson| lesson.summarize(include_bonus_levels)} if include_lessons
     summary[:professionalLearningCourse] = professional_learning_course if professional_learning_course?
     summary[:wrapupVideo] = wrapup_video.key if wrapup_video
+    summary[:calendarLessons] = filtered_lessons.map(&:summarize_for_calendar)
 
     summary
   end
@@ -1395,15 +1493,16 @@ class Script < ApplicationRecord
       disablePostMilestone: disable_post_milestone?,
       isHocScript: hoc?,
       student_detail_progress_view: student_detail_progress_view?,
-      age_13_required: logged_out_age_13_required?
+      age_13_required: logged_out_age_13_required?,
+      is_csf: csf?
     }
   end
 
-  def summarize_for_lesson_show
+  def summarize_for_lesson_show(is_student = false)
     {
       displayName: localized_title,
       link: link,
-      lessons: lessons.map(&:summarize_for_lesson_dropdown)
+      lessons: lessons.select(&:has_lesson_plan).map {|lesson| lesson.summarize_for_lesson_dropdown(is_student)}
     }
   end
 
@@ -1537,16 +1636,17 @@ class Script < ApplicationRecord
       :editor_experiment,
       :curriculum_umbrella,
       :background,
+      :weekly_instructional_minutes,
     ]
     boolean_keys = [
       :has_verified_resources,
-      :has_lesson_plan,
       :is_stable,
       :project_sharing,
       :tts,
       :is_course,
       :show_calendar,
-      :is_migrated
+      :is_migrated,
+      :include_student_lesson_plans
     ]
     not_defaulted_keys = [
       :teacher_resources, # teacher_resources gets updated from the script edit UI through its own code path
@@ -1772,7 +1872,7 @@ class Script < ApplicationRecord
   # If the attributes of this object alone aren't sufficient, and associated objects are needed, then data from
   # the seeding_keys of those objects should be included as well.
   # Ideally should correspond to a unique index for this model's table.
-  # See comments on ScriptSeed.seed_from_json for more context.
+  # See comments on ScriptSeed.seed_from_hash for more context.
   #
   # @param [ScriptSeed::SeedContext] seed_context - contains preloaded data to use when looking up associated objects
   # @return [Hash<String, String>] all information needed to uniquely identify this object across environments.

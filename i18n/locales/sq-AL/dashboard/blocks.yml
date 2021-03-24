@@ -187,6 +187,7 @@ sq:
         options:
           PROPERTY:
             '"scale"': madhësia
+            '"speed"': shpejtësia
       gamelab_checkTouching:
         options:
           CONDITION:
@@ -196,6 +197,7 @@ sq:
         options:
           PROPERTY:
             '"scale"': madhësia
+            '"speed"': shpejtësia
       gamelab_getTime:
         options:
           UNIT:
@@ -241,10 +243,18 @@ sq:
             '"https://studio.code.org/blockly/media/skins/studio/background_rainbow.png"': ylber
             '"https://studio.code.org/blockly/media/skins/studio/background_underwater.png"': nën ujë
             '"https://studio.code.org/blockly/media/skins/studio/background_winter.png"': dimër
+      gamelab_setDefaultSpriteSize:
+        options:
+          SIZE:
+            '25': extra small
+            '50': small
+            '75': mesatar
+            '100': large
       gamelab_setProp:
         options:
           PROPERTY:
             '"scale"': madhësia
+            '"speed"': shpejtësia
       gamelab_setSizes:
         options:
           PROPERTY:
@@ -340,7 +350,9 @@ sq:
             '"left"': shigjetë drejtuar majtas
             '"right"': shigjetë drejtuar djathtas
             '"w"': P
+            '"a"': A
             '"s"': J
+            '"d"': D
       Mikelab_whenKeyReleased:
         options:
           KEY:
@@ -349,7 +361,9 @@ sq:
             '"left"': shigjetë drejtuar majtas
             '"right"': shigjetë drejtuar djathtas
             '"w"': P
+            '"a"': A
             '"s"': J
+            '"d"': D
       Mikelab_whileKeyPressed:
         options:
           KEY:

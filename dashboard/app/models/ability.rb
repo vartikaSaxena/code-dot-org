@@ -12,6 +12,7 @@ class Ability
     cannot :read, [
       TeacherFeedback,
       Script, # see override below
+      Lesson, # see override below
       ScriptLevel, # see override below
       :reports,
       User,
@@ -52,7 +53,9 @@ class Ability
       :update_manifest,
       :foorm_editor,
       :pd_foorm,
-      Foorm::Form
+      Foorm::Form,
+      Foorm::Library,
+      Foorm::LibraryQuestion
     ]
     cannot :index, Level
 
@@ -196,6 +199,14 @@ class Ability
         user.persisted? || !script.login_required?
       end
     end
+    can [:read, :student_lesson_plan], Lesson do |lesson|
+      script = lesson.script
+      if script.pilot?
+        script.has_pilot_access?(user)
+      else
+        true
+      end
+    end
     can :read, ScriptLevel do |script_level, params|
       script = script_level.script
       if script.pilot?
@@ -238,7 +249,9 @@ class Ability
         ScriptLevel,
         Video,
         :foorm_editor,
-        Foorm::Form
+        Foorm::Form,
+        Foorm::Library,
+        Foorm::LibraryQuestion
       ]
 
       # Only custom levels are editable.
@@ -252,7 +265,7 @@ class Ability
 
       can [:edit_manifest, :update_manifest, :index, :show, :update, :destroy], :dataset
 
-      can :validate_form, :pd_foorm
+      can [:validate_form, :validate_library_question], :pd_foorm
     end
 
     if user.persisted?
@@ -262,6 +275,7 @@ class Ability
         can :clone, Level, &:custom?
         can :manage, Level, editor_experiment: editor_experiment
         can [:edit, :update], Script, editor_experiment: editor_experiment
+        can [:edit, :update], Lesson, editor_experiment: editor_experiment
       end
     end
 
@@ -283,11 +297,14 @@ class Ability
         Level,
         UnitGroup,
         Script,
+        Lesson,
         ScriptLevel,
         UserLevel,
         UserScript,
         :pd_foorm,
-        Foorm::Form
+        Foorm::Form,
+        Foorm::Library,
+        Foorm::LibraryQuestion
       ]
     end
   end

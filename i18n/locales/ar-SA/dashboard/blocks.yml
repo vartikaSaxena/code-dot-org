@@ -978,9 +978,10 @@ ar:
           PROPERTY:
             '"scale"': الحجم
             '"rotation"': الدوران
-            '"x"': الموضع س
-            '"y"': الموضع ص
+            '"x"': الموقع س
+            '"y"': الموقع ص
             '"direction"': اتجاه الحركة
+            '"speed"': السرعة
       gamelab_checkTouching:
         text: "{CONDITION} {SPRITE1} اللمسات {SPRITE2}"
         options:
@@ -1007,10 +1008,11 @@ ar:
           PROPERTY:
             '"scale"': الحجم
             '"rotation"': الدوران
-            '"x"': الموضع س
-            '"y"': الموضع ص
+            '"x"': الموقع س
+            '"y"': الموقع ص
             '"direction"': اتجاه الحركة
             '"tint"': لون خفيف
+            '"speed"': السرعة
       gamelab_getThisSprite:
         text: "{CHOICE} العفريت"
         options:
@@ -1136,6 +1138,8 @@ ar:
             '"West"': غرب
       gamelab_moveToward:
         text: نقل {SPRITE} العنصورات {DISTANCE} نحو {TARGET}
+      gamelab_newSpritePointer:
+        text: النقر {SPRITE}
       gamelab_objectSpritePointer:
         text: النقر {SPRITE}
       gamelab_playSound:
@@ -1186,15 +1190,23 @@ ar:
             undefined: لا شيء
       gamelab_setBackgroundImageAs:
         text: تعيين الخلفية إلى {IMG}
+      gamelab_setDefaultSpriteSize:
+        options:
+          SIZE:
+            '25': extra small
+            '50': small
+            '75': متوسط
+            '100': large
       gamelab_setProp:
         text: تعيين {SPRITE} {PROPERTY} ل {VAL}
         options:
           PROPERTY:
             '"scale"': الحجم
             '"rotation"': الدوران
-            '"x"': الموضع س
-            '"y"': الموضع ص
+            '"x"': الموقع س
+            '"y"': الموقع ص
             '"direction"': اتجاه الحركة
+            '"speed"': السرعة
       gamelab_setSizes:
         text: عيّن {SPRITE} {PROPERTY} على {N}%
         options:
@@ -1297,8 +1309,8 @@ ar:
           PROPERTY:
             '"scale"': الحجم
             '"rotation"': الدوران
-            '"x"': الموضع س
-            '"y"': الموضع ص
+            '"x"': الموقع س
+            '"y"': الموقع ص
             '"direction"': اتجاه الحركة
       Mikelab_createNewSprite:
         options:
@@ -1321,8 +1333,8 @@ ar:
           PROPERTY:
             '"scale"': الحجم
             '"rotation"': الدوران
-            '"x"': الموضع س
-            '"y"': الموضع ص
+            '"x"': الموقع س
+            '"y"': الموقع ص
             '"direction"': اتجاه الحركة
       Mikelab_groupChangeAnim:
         text: قم بتغيير {SELECT} {COSTUME} في {COSTUME2}
@@ -1339,8 +1351,8 @@ ar:
           PROPERTY:
             '"scale"': الحجم
             '"rotation"': الدوران
-            '"x"': الموضع س
-            '"y"': الموضع ص
+            '"x"': الموقع س
+            '"y"': الموقع ص
             '"direction"': اتجاه الحركة
       Mikelab_groupCreateNewSprite:
         text: قم بإنشاء {COSTUME} جديد في {LOCATION}
@@ -1374,8 +1386,8 @@ ar:
           PROPERTY:
             '"scale"': الحجم
             '"rotation"': الدوران
-            '"x"': الموضع س
-            '"y"': الموضع ص
+            '"x"': الموقع س
+            '"y"': الموقع ص
             '"direction"': اتجاه الحركة
       Mikelab_groupRemoveAllBehaviors:
         text: وقف {SELECT} {COSTUME} السلوكيات
@@ -1404,8 +1416,8 @@ ar:
           PROPERTY:
             '"scale"': الحجم
             '"rotation"': الدوران
-            '"x"': الموضع س
-            '"y"': الموضع ص
+            '"x"': الموقع س
+            '"y"': الموقع ص
             '"direction"': اتجاه الحركة
       Mikelab_groupSetTint:
         text: تغيير لون {SELECT} {COSTUME} ل {COLOR}
@@ -1496,8 +1508,8 @@ ar:
           PROPERTY:
             '"scale"': الحجم
             '"rotation"': الدوران
-            '"x"': الموضع س
-            '"y"': الموضع ص
+            '"x"': الموقع س
+            '"y"': الموقع ص
             '"direction"': اتجاه الحركة
       Mikelab_showScoreboard:
         options:

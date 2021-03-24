@@ -27,6 +27,8 @@ class P5LabView extends React.Component {
     // Provided manually
     showFinishButton: PropTypes.bool.isRequired,
     onMount: PropTypes.func.isRequired,
+    pauseHandler: PropTypes.func.isRequired,
+    hidePauseButton: PropTypes.bool.isRequired,
     // Provided by Redux
     interfaceMode: PropTypes.oneOf([
       P5LabInterfaceMode.CODE,
@@ -40,8 +42,7 @@ class P5LabView extends React.Component {
     isIframeEmbed: PropTypes.bool.isRequired,
     isRunning: PropTypes.bool.isRequired,
     spriteLab: PropTypes.bool.isRequired,
-    isBackground: PropTypes.bool,
-    pauseHandler: PropTypes.func.isRequired
+    isBackground: PropTypes.bool
   };
 
   state = {
@@ -64,14 +65,6 @@ class P5LabView extends React.Component {
       .then(libraryManifest => {
         this.setState({libraryManifest});
       });
-  }
-
-  // TODO(JillianK): Remove this function and all uses of it once new sprites have been added to the Spritelab animaion library.
-  // Jira context: https://codedotorg.atlassian.net/browse/STAR-1319
-  generateCategoryImagePathPrefix() {
-    return this.props.spriteLab
-      ? '/blockly/media/spritelab/animation-previews-spritelab/category_'
-      : '/blockly/media/gamelab/animation-previews-gamelab/category_';
   }
 
   renderCodeMode() {
@@ -111,7 +104,6 @@ class P5LabView extends React.Component {
     // we don't want students to be able to draw their own backgrounds in spritelab so if we're showing
     // backgrounds alone, we must be in spritelab and we should get rid of the draw your own option
     const canDraw = !this.props.isBackground;
-    const categoryImagePathPrefix = this.generateCategoryImagePathPrefix();
     return (
       <div style={codeModeStyle}>
         <div
@@ -123,6 +115,7 @@ class P5LabView extends React.Component {
           <P5LabVisualizationColumn
             finishButton={showFinishButton}
             pauseHandler={this.props.pauseHandler}
+            hidePauseButton={this.props.hidePauseButton}
           />
           {this.getChannelId() && (
             <AnimationPicker
@@ -135,7 +128,6 @@ class P5LabView extends React.Component {
               defaultQuery={this.props.isBackground ? defaultQuery : undefined}
               hideBackgrounds={hideBackgrounds}
               canDraw={canDraw}
-              categoryImagePathPrefix={categoryImagePathPrefix}
             />
           )}
         </div>
@@ -157,7 +149,6 @@ class P5LabView extends React.Component {
 
   renderAnimationMode() {
     const {allowAnimationMode, interfaceMode} = this.props;
-    const categoryImagePathPrefix = this.generateCategoryImagePathPrefix();
     return allowAnimationMode &&
       interfaceMode === P5LabInterfaceMode.ANIMATION ? (
       <AnimationTab
@@ -166,7 +157,6 @@ class P5LabView extends React.Component {
         hideUploadOption={this.props.spriteLab}
         hideAnimationNames={this.props.spriteLab}
         hideBackgrounds={this.props.spriteLab}
-        categoryImagePathPrefix={categoryImagePathPrefix}
       />
     ) : (
       undefined

@@ -214,7 +214,7 @@
           "Course_4_Play_Lab_Vars_9_1": "Všetky Vaše bloky sú odteraz usporiadané do kategórií! Kliknite na nadpis pre zobrazenie blokov v danej kategórií."
         },
         "Course 4 Playlab For Loops 4b": {
-          "Course_4_Playlab_For_Loops_4b_1": "Všimli ste si, že premenná \"počítadlo\" má iné meno pre každú postavu? To preto, aby ste pre každú slučku \"for\" mohli mať vlastné počítadlo.",
+          "Course_4_Playlab_For_Loops_4b_1": "Všimli ste si, že premenná \"počítadlo\" má iné meno pre každú postavu? To preto, aby ste pre každú slučku \"pre\" mohli mať vlastné počítadlo.",
           "Course_4_Playlab_For_Loops_4b_2": "V tomto cvičení môžete zmeniť len \"násobky\" \"for\" slučiek."
         },
         "Course 4 SCV 6": {
@@ -431,7 +431,7 @@
           "courseE_playLab_scaffold3_1": "Dostaňte herca k tejto vlajočke pre postup do ďaľšieho levelu."
         },
         "OPD-K5-spritelab-3": {
-          "spritelab_comment": "Použi tento blok a napíš odkaz sebe alebo svojmu učiteľovi o tom ako tvoj kód funguje."
+          "spritelab_comment": "Použi tento blok a napíš odkaz sebe alebo svojmu učiteľovi o tom, ako tvoj kód funguje."
         },
         "OPD-K5-variables-1": {
           "grade5_artist_variables_triangles1_1": "Všimni si, že bloky majú nový spôsob zadávani čísiel. Tieto \"matematické\" bloky môžeš vytiahnuť a presúvať podľa potreby!"

@@ -23,6 +23,7 @@ class ScriptTest < ActiveSupport::TestCase
     @csf_script = create :csf_script, name: 'csf1'
     @csd_script = create :csd_script, name: 'csd1'
     @csp_script = create :csp_script, name: 'csp1'
+    @csa_script = create :csa_script, name: 'csa1'
 
     @csf_script_2019 = create :csf_script, name: 'csf-2019', version_year: '2019'
 
@@ -233,7 +234,7 @@ class ScriptTest < ActiveSupport::TestCase
     script_names, _ = Script.setup([script_file_all_properties])
     script = Script.find_by!(name: script_names.first)
 
-    assert_equal 21, script.properties.keys.length
+    assert_equal 20, script.properties.keys.length
     script.properties.values.each {|v| assert v}
 
     # Seed using an empty .script file with the same name. Verify that this sets all properties values back to defaults.
@@ -263,7 +264,8 @@ class ScriptTest < ActiveSupport::TestCase
 
     # test that LessonActivity, ActivitySection and Objective can be seeded
     # from .script_json when is_migrated is specified in the .script file.
-    create :maze, name: 'test_maze_level'
+    # use 'custom' level num to make level key match level name.
+    create :maze, name: 'test_maze_level', level_num: 'custom'
     script_file = File.join(self.class.fixture_path, 'config', 'scripts', 'test-migrated-models.script')
     Script.setup([script_file])
 
@@ -873,13 +875,64 @@ class ScriptTest < ActiveSupport::TestCase
       script: script,
       name: 'Lesson 1',
       key: 'lesson-1',
+      has_lesson_plan: true,
+      lockable: false,
       relative_position: 1,
       absolute_position: 1
+    )
+    create(
+      :lesson,
+      lesson_group: lesson_group,
+      script: script,
+      name: 'Lesson 2',
+      key: 'lesson-2',
+      has_lesson_plan: false,
+      lockable: false,
+      relative_position: 2,
+      absolute_position: 2
     )
 
     summary = script.summarize_for_lesson_show
     assert_equal '/s/my-script', summary[:link]
+    # only includes lessons with lesson plans
+    assert_equal 1, summary[:lessons].count
     assert_equal 'lesson-1', summary[:lessons][0][:key]
+    assert_equal '/s/my-script/lessons/1', summary[:lessons][0][:link]
+  end
+
+  test 'can summarize script for student lesson plan' do
+    script = create :script, name: 'my-script'
+    lesson_group = create :lesson_group, script: script
+    create(
+      :lesson,
+      lesson_group: lesson_group,
+      script: script,
+      name: 'Lesson 1',
+      key: 'lesson-1',
+      has_lesson_plan: true,
+      lockable: false,
+      relative_position: 1,
+      absolute_position: 1
+    )
+    create(
+      :lesson,
+      lesson_group: lesson_group,
+      script: script,
+      name: 'Lesson 2',
+      key: 'lesson-2',
+      has_lesson_plan: false,
+      lockable: false,
+      relative_position: 2,
+      absolute_position: 2
+    )
+
+    summary = script.summarize_for_lesson_show(true)
+    assert_equal '/s/my-script', summary[:link]
+    # only includes lessons with lesson plans
+    assert_equal 1, summary[:lessons].count
+    assert_equal 'lesson-1', summary[:lessons][0][:key]
+    # lesson links end with /student
+    assert_equal '/s/my-script/lessons/1/student', summary[:lessons][0][:link]
   end
 
   class SummarizeVisibleAfterScriptTests < ActiveSupport::TestCase
@@ -937,6 +990,7 @@ class ScriptTest < ActiveSupport::TestCase
       isHocScript: false,
       student_detail_progress_view: false,
       age_13_required: false,
+      is_csf: false,
     }
     assert_equal expected, script.summarize_header
   end
@@ -953,13 +1007,20 @@ class ScriptTest < ActiveSupport::TestCase
   test 'summarize includes show_calendar' do
     script = create(:script, name: 'calendar-script')
 
+    script.is_migrated = true
     script.show_calendar = true
     assert script.show_calendar
     summary = script.summarize
     assert summary[:showCalendar]
 
+    script.is_migrated = true
     script.show_calendar = false
     refute script.show_calendar
+    summary = script.summarize
+    refute summary[:showCalendar]
+
+    script.is_migrated = false
+    script.show_calendar = true
     summary = script.summarize
     refute summary[:showCalendar]
   end
@@ -976,20 +1037,6 @@ class ScriptTest < ActiveSupport::TestCase
     refute script.has_verified_resources
     summary = script.summarize
     refute summary[:has_verified_resources]
-  end
-
-  test 'summarize includes has_lesson_plan' do
-    script = create(:script, name: 'resources-script')
-
-    script.has_lesson_plan = true
-    assert script.has_lesson_plan
-    summary = script.summarize
-    assert summary[:has_lesson_plan]
-
-    script.has_lesson_plan = false
-    refute script.has_lesson_plan
-    summary = script.summarize
-    refute summary[:has_lesson_plan]
   end
 
   test 'summarize includes show_course_unit_version_warning' do
@@ -1608,11 +1655,10 @@ class ScriptTest < ActiveSupport::TestCase
   test 'can set custom curriculum path' do
     l = create :level
     dsl = <<-SCRIPT
-      has_lesson_plan true
       curriculum_path '//example.com/{LOCALE}/foo/{LESSON}'
-      lesson 'Lesson1', display_name: 'Lesson1'
+      lesson 'Lesson1', display_name: 'Lesson1', has_lesson_plan: true
       level '#{l.name}'
-      lesson 'Lesson2', display_name: 'Lesson2'
+      lesson 'Lesson2', display_name: 'Lesson2', has_lesson_plan: true
       level '#{l.name}'
     SCRIPT
     script_data, _ = ScriptDSL.parse(dsl, 'a filename')
@@ -1699,7 +1745,6 @@ class ScriptTest < ActiveSupport::TestCase
 
     # some properties that should not change
     assert script.curriculum_path
-    assert script.has_lesson_plan
 
     Script.stubs(:script_directory).returns(self.class.fixture_path)
     script_copy = script.clone_with_suffix('copy')
@@ -1713,7 +1758,6 @@ class ScriptTest < ActiveSupport::TestCase
 
     # some properties that should not change
     assert script_copy.curriculum_path
-    assert script_copy.has_lesson_plan
   end
 
   test 'clone versioned script with suffix' do
@@ -1752,7 +1796,7 @@ class ScriptTest < ActiveSupport::TestCase
     assert_equal expected_level_names, actual_level_names
 
     new_dsl = <<~SCRIPT
-      lesson 'lesson1', display_name: 'lesson1'
+      lesson 'lesson1', display_name: 'lesson1', has_lesson_plan: false
       level 'Level 1_copy'
       level 'Level 4_copy'
       level 'Level 5_copy'
@@ -2161,6 +2205,10 @@ class ScriptTest < ActiveSupport::TestCase
       [@csp_script.name],
       Script.script_names_by_curriculum_umbrella('CSP')
     )
+    assert_equal(
+      [@csa_script.name],
+      Script.script_names_by_curriculum_umbrella('CSA')
+    )
   end
 
   test "under_curriculum_umbrella and helpers" do
@@ -2170,6 +2218,8 @@ class ScriptTest < ActiveSupport::TestCase
     assert @csd_script.csd?
     assert @csp_script.under_curriculum_umbrella?('CSP')
     assert @csp_script.csp?
+    assert @csa_script.under_curriculum_umbrella?('CSA')
+    assert @csa_script.csa?
   end
 
   test "scripts_with_standards" do
@@ -2371,6 +2421,74 @@ class ScriptTest < ActiveSupport::TestCase
 
     assert_equal script.lessons[0].lesson_group.id, script.lessons[1].lesson_group.id
     refute_equal script.lessons[0].lesson_group.id, script.lessons[2].lesson_group.id
+  end
+
+  test 'can move lesson to later lesson group in script' do
+    script = create :script, name: 'lesson-group-test-script'
+    lesson_group1 = create :lesson_group, key: 'lg-1', script: script
+    lesson1 = create :lesson, key: 'l-1', name: 'Lesson 1', lesson_group: lesson_group1
+    lesson2 = create :lesson, key: 'l-2', name: 'Lesson 2', lesson_group: lesson_group1
+    activity = create :lesson_activity, lesson: lesson2
+    activity_section = create :activity_section, lesson_activity: activity
+    level1 = create :level
+    script_level = create :script_level, script: script, lesson: lesson2, levels: [level1], activity_section: activity_section, activity_section_position: 1
+    lesson_group2 = create :lesson_group, key: 'lg-2', script: script
+    lesson3 = create :lesson, key: 'l-3', name: 'Lesson 3', lesson_group: lesson_group2
+
+    new_dsl = <<-SCRIPT
+      lesson_group '#{lesson_group1.key}', display_name: 'Lesson Group 1'
+      lesson '#{lesson1.key}', display_name: '#{lesson1.name}'
+
+      lesson_group '#{lesson_group2.key}', display_name: 'Lesson Group 2'
+      lesson '#{lesson2.key}', display_name: '#{lesson2.name}'
+      level '#{level1.name}'
+
+      lesson '#{lesson3.key}', display_name: '#{lesson3.name}'
+    SCRIPT
+
+    script = Script.add_script(
+      {name: 'lesson-group-test-script'},
+      ScriptDSL.parse(new_dsl, 'a filename')[0][:lesson_groups]
+    )
+
+    assert_equal script.lessons[1].lesson_group_id, lesson_group2.id
+    assert_equal script.lessons[1].id, lesson2.id
+    assert_equal script.script_levels[0].id, script_level.id
+    assert_equal script.script_levels[0].activity_section_id, activity_section.id
+  end
+
+  test 'can move last lesson group up' do
+    script = create :script, name: 'lesson-group-test-script'
+    lesson_group1 = create :lesson_group, key: 'lg-1', script: script
+    lesson1 = create :lesson, key: 'l-1', name: 'Lesson 1', lesson_group: lesson_group1
+    lesson2 = create :lesson, key: 'l-2', name: 'Lesson 2', lesson_group: lesson_group1
+    activity = create :lesson_activity, lesson: lesson2
+    activity_section = create :activity_section, lesson_activity: activity
+    level1 = create :level
+    script_level = create :script_level, script: script, lesson: lesson2, levels: [level1], activity_section: activity_section, activity_section_position: 1
+    lesson_group2 = create :lesson_group, key: 'lg-2', script: script
+    lesson3 = create :lesson, key: 'l-3', name: 'Lesson 3', lesson_group: lesson_group2
+
+    new_dsl = <<-SCRIPT
+      lesson_group '#{lesson_group2.key}', display_name: 'Lesson Group 2'
+      lesson '#{lesson3.key}', display_name: '#{lesson3.name}'
+
+      lesson_group '#{lesson_group1.key}', display_name: 'Lesson Group 1'
+      lesson '#{lesson1.key}', display_name: '#{lesson1.name}'
+
+      lesson '#{lesson2.key}', display_name: '#{lesson2.name}'
+      level '#{level1.name}'
+    SCRIPT
+
+    script = Script.add_script(
+      {name: 'lesson-group-test-script'},
+      ScriptDSL.parse(new_dsl, 'a filename')[0][:lesson_groups]
+    )
+
+    assert_equal script.lessons[2].lesson_group_id, lesson_group1.id
+    assert_equal script.lessons[2].id, lesson2.id
+    assert_equal script.script_levels[0].id, script_level.id
+    assert_equal script.script_levels[0].activity_section_id, activity_section.id
   end
 
   test 'can add the lesson group for a lesson' do
@@ -2738,6 +2856,20 @@ class ScriptTest < ActiveSupport::TestCase
     assert error.message.include? "for key 'index_script_levels_on_seed_key'"
   end
 
+  test 'can add unplugged for lesson' do
+    dsl = <<-SCRIPT
+      lesson_group 'lg-1', display_name: 'Lesson Group'
+      lesson 'Lesson1', display_name: 'Lesson 1', unplugged: true
+    SCRIPT
+
+    script = Script.add_script(
+      {name: 'lesson-group-test-script'},
+      ScriptDSL.parse(dsl, 'a filename')[0][:lesson_groups]
+    )
+
+    assert_equal true, script.lessons[0].unplugged
+  end
+
   test 'seeding_key' do
     script = create :script
 
@@ -2749,7 +2881,7 @@ class ScriptTest < ActiveSupport::TestCase
   end
 
   test 'fix script level positions' do
-    script = create :script
+    script = create :script, is_migrated: true, hidden: true
     lesson_group = create :lesson_group, script: script
 
     lesson_1 = create :lesson, script: script, lesson_group: lesson_group
@@ -2805,7 +2937,7 @@ class ScriptTest < ActiveSupport::TestCase
   end
 
   test 'cannot fix position of legacy script levels' do
-    script = create :script
+    script = create :script, is_migrated: true, hidden: true
     lesson_group = create :lesson_group, script: script
     lesson = create :lesson, script: script, lesson_group: lesson_group
 
@@ -2815,7 +2947,7 @@ class ScriptTest < ActiveSupport::TestCase
     error = assert_raises do
       script.fix_script_level_positions
     end
-    assert_includes error.message, "cannot fix position of legacy script levels"
+    assert_includes error.message, 'Legacy script levels are not allowed in migrated scripts.'
   end
 
   private

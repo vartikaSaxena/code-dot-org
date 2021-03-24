@@ -145,6 +145,7 @@ hy:
         options:
           PROPERTY:
             '"scale"': չափ
+            '"speed"': արագություն
       gamelab_checkTouching:
         options:
           CONDITION:
@@ -154,6 +155,7 @@ hy:
         options:
           PROPERTY:
             '"scale"': չափ
+            '"speed"': արագություն
       gamelab_getTime:
         options:
           UNIT:
@@ -203,6 +205,7 @@ hy:
         options:
           PROPERTY:
             '"scale"': չափ
+            '"speed"': արագություն
       gamelab_setSizes:
         options:
           PROPERTY:

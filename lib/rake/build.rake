@@ -52,7 +52,7 @@ namespace :build do
 
         # Update the schema cache file, except for production which always uses the cache.
         unless rack_env?(:production)
-          schema_cache_file = dashboard_dir('db/schema_cache.dump')
+          schema_cache_file = dashboard_dir('db/schema_cache.yml')
           RakeUtils.rake 'db:schema:cache:dump'
           if GitUtils.file_changed_from_git?(schema_cache_file)
             # Staging is responsible for committing the authoritative schema cache dump.
@@ -78,7 +78,7 @@ namespace :build do
         else
           ChatClient.log 'Seeding <b>dashboard</b>...'
           ChatClient.log 'consider setting "skip_seed_all" in locals.yml if this is taking too long' if rack_env?(:development)
-          RakeUtils.rake 'seed:default', (rack_env?(:test) ? '--trace' : nil)
+          RakeUtils.rake_stream_output 'seed:default', (rack_env?(:test) ? '--trace' : nil)
         end
 
         # Commit dsls.en.yml changes on staging

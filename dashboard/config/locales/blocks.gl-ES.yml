@@ -139,6 +139,7 @@ gl:
             '"scale"': tamaño
             '"x"': posición x
             '"y"': posición y
+            '"speed"': velocidade
       gamelab_checkTouching:
         options:
           CONDITION:
@@ -150,6 +151,7 @@ gl:
             '"scale"': tamaño
             '"x"': posición x
             '"y"': posición y
+            '"speed"': velocidade
       gamelab_getTime:
         options:
           UNIT:
@@ -201,6 +203,7 @@ gl:
             '"scale"': tamaño
             '"x"': posición x
             '"y"': posición y
+            '"speed"': velocidade
       gamelab_setSizes:
         options:
           PROPERTY:

@@ -281,6 +281,7 @@ en:
     invite_sent: 'Invite sent'
     added_teacher: '%{name} added as your teacher'
     registered:  "You've registered for %{section_name}."
+    captcha_required: 'Please fill out the CAPTCHA to join this section.'
     error:
       signed_in: 'Please signout before proceeding'
       username_not_found: 'Username %{username} not found'
@@ -580,6 +581,7 @@ en:
     tos_short: 'Terms'
     tos: 'Terms of Service'
     privacy: 'Privacy Policy'
+    privacy_updated: 'Privacy Policy (updated)'
     secure: 'Secure Version'
     report_abuse: 'Report Abuse'
     built_on_code_studio: 'Built on Code Studio'
@@ -831,7 +833,7 @@ en:
     save: "Save"
   race_interstitial:
     title: "Optional: Help us track our progress toward improving diversity in computer science"
-    message: "Please tell us your race (check all that apply)"
+    message: "Please tell us your race or ethnicity (check all that apply)"
     races:
       white: "White"
       black: "Black or African American"
@@ -1165,3 +1167,4 @@ en:
   behaviors:
     this_sprite: "this sprite"
   unit_prefix: "Unit %{n}"
+  code_org_logo_alt: "Code.org Home"

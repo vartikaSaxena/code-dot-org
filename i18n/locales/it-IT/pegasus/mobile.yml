@@ -1453,6 +1453,8 @@
   header_legal_privacy: "Informativa sulla privacy"
   header_legal_tos: "Termini di servizio"
   header_tutorials: "Corsi"
+  header_screen_reader_hamburger: "Menu"
+  header_screen_reader_help: "Menu Aiuto"
   app_lab_documentation: "Documentazione dell'App Lab"
   app_lab_tutorials: "Tutorial dell'App Lab"
   game_lab_documentation: "Documentazione del Game Lab"
@@ -1674,3 +1676,9 @@
   hoc2020_mc_mee_description: 'Il nuovo tutorial dell''Ora del Codice di Minecraft è ora disponibile in Minecraft: Education Edition per Windows, Mac, Chromebook e iPad. Impara i fondamenti della programmazione e esplora la diversità e l''inclusione con i tuoi studenti! Accedi alle risorse gratuite tra cui un piano delle lezioni, video, curriculum di informatica, lezioni di equità e addestramenti degli insegnanti.'
   footer_powered_by_aws: "Eseguito su Amazon Web Services"
   codebytes_skinny_banner_english_only: "Solo in inglese"
+  footer_privacy_policy: "Informativa sulla privacy"
+  footer_about: "Informazioni"
+  footer_partners: "Partner"
+  footer_donate: "Sostienici"
+  footer_support: "Help and Community"
+  footer_terms: "Condizioni"

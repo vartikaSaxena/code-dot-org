@@ -356,6 +356,7 @@ sl:
             '"scale"': velikost
             '"x"': x položaj
             '"y"': y položaj
+            '"speed"': hitrost
       gamelab_checkTouching:
         options:
           CONDITION:
@@ -367,6 +368,7 @@ sl:
             '"scale"': velikost
             '"x"': x položaj
             '"y"': y položaj
+            '"speed"': hitrost
       gamelab_getTime:
         options:
           UNIT:
@@ -414,12 +416,20 @@ sl:
             '"https://studio.code.org/blockly/media/skins/studio/background_rainbow.png"': mavrica
             '"https://studio.code.org/blockly/media/skins/studio/background_underwater.png"': pod vodo
             '"https://studio.code.org/blockly/media/skins/studio/background_winter.png"': zima
+      gamelab_setDefaultSpriteSize:
+        options:
+          SIZE:
+            '25': extra small
+            '50': small
+            '75': srednje
+            '100': large
       gamelab_setProp:
         options:
           PROPERTY:
             '"scale"': velikost
             '"x"': x položaj
             '"y"': y položaj
+            '"speed"': hitrost
       gamelab_setSizes:
         options:
           PROPERTY:

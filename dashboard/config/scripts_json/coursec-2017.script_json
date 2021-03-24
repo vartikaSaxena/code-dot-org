@@ -30,10 +30,15 @@
         "pl-PL",
         "pt-BR",
         "pt-PT",
+        "ro-RO",
         "ru-RU",
         "sk-SK",
+        "ta-IN",
+        "th-TH",
         "tr-TR",
+        "ur-PK",
         "uz-UZ",
+        "vi-VN",
         "zh-CN",
         "zh-TW"
       ],
@@ -42,8 +47,7 @@
       "tts": true,
       "lesson_extras_available": true,
       "hideable_lessons": true,
-      "is_course": true,
-      "peer_reviews_to_complete": 0
+      "is_course": true
     },
     "new_name": "coursec-2017",
     "family_name": "coursec",
@@ -70,8 +74,10 @@
       "name": "Persistence: Building a Foundation",
       "absolute_position": 1,
       "lockable": false,
+      "has_lesson_plan": true,
       "relative_position": 1,
       "properties": {
+        "unplugged": true
       },
       "seeding_key": {
         "lesson.key": "Building a Foundation",
@@ -84,6 +90,7 @@
       "name": "Programming in Maze",
       "absolute_position": 2,
       "lockable": false,
+      "has_lesson_plan": true,
       "relative_position": 2,
       "properties": {
       },
@@ -98,6 +105,7 @@
       "name": "Debugging in Maze",
       "absolute_position": 3,
       "lockable": false,
+      "has_lesson_plan": true,
       "relative_position": 3,
       "properties": {
       },
@@ -112,8 +120,10 @@
       "name": "Real-life Algorithms: Paper Planes",
       "absolute_position": 4,
       "lockable": false,
+      "has_lesson_plan": true,
       "relative_position": 4,
       "properties": {
+        "unplugged": true
       },
       "seeding_key": {
         "lesson.key": "Real-life Algorithms: Paper Planes",
@@ -126,6 +136,7 @@
       "name": "Programming in Collector",
       "absolute_position": 5,
       "lockable": false,
+      "has_lesson_plan": true,
       "relative_position": 5,
       "properties": {
       },
@@ -140,6 +151,7 @@
       "name": "Programming in Artist",
       "absolute_position": 6,
       "lockable": false,
+      "has_lesson_plan": true,
       "relative_position": 6,
       "properties": {
       },
@@ -154,8 +166,10 @@
       "name": "Loops: Getting Loopy",
       "absolute_position": 7,
       "lockable": false,
+      "has_lesson_plan": true,
       "relative_position": 7,
       "properties": {
+        "unplugged": true
       },
       "seeding_key": {
         "lesson.key": "Loops: Getting Loopy",
@@ -168,6 +182,7 @@
       "name": "Loops with Rey and BB-8",
       "absolute_position": 8,
       "lockable": false,
+      "has_lesson_plan": true,
       "relative_position": 8,
       "properties": {
       },
@@ -182,6 +197,7 @@
       "name": "Loops in Artist",
       "absolute_position": 9,
       "lockable": false,
+      "has_lesson_plan": true,
       "relative_position": 9,
       "properties": {
       },
@@ -196,6 +212,7 @@
       "name": "Loops in Harvester",
       "absolute_position": 10,
       "lockable": false,
+      "has_lesson_plan": true,
       "relative_position": 10,
       "properties": {
       },
@@ -210,8 +227,10 @@
       "name": "Events: The Big Event",
       "absolute_position": 11,
       "lockable": false,
+      "has_lesson_plan": true,
       "relative_position": 11,
       "properties": {
+        "unplugged": true
       },
       "seeding_key": {
         "lesson.key": "Events: The Big Event",
@@ -224,6 +243,7 @@
       "name": "Build a Flappy Game",
       "absolute_position": 12,
       "lockable": false,
+      "has_lesson_plan": true,
       "relative_position": 12,
       "properties": {
       },
@@ -238,6 +258,7 @@
       "name": "Events in Play Lab",
       "absolute_position": 13,
       "lockable": false,
+      "has_lesson_plan": true,
       "relative_position": 13,
       "properties": {
       },
@@ -252,8 +273,10 @@
       "name": "Digital Citizenship: Screen Out the Mean",
       "absolute_position": 14,
       "lockable": false,
+      "has_lesson_plan": true,
       "relative_position": 14,
       "properties": {
+        "unplugged": true
       },
       "seeding_key": {
         "lesson.key": "Screen Out the Mean",
@@ -266,8 +289,10 @@
       "name": "Beyond Programming: Binary Bracelets",
       "absolute_position": 15,
       "lockable": false,
+      "has_lesson_plan": true,
       "relative_position": 15,
       "properties": {
+        "unplugged": true
       },
       "seeding_key": {
         "lesson.key": "Binary Bracelets",
@@ -289,6 +314,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "BuildingAFoundation"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -310,6 +338,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_video_maze"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -331,6 +362,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_maze_programming1"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -352,6 +386,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_maze_programming2"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -373,6 +410,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_maze_programming3"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -394,6 +434,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_maze_programming4"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -415,6 +458,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_maze_programming5"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -436,6 +482,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_maze_programming6"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -457,7 +506,10 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
-        "challenge": true
+        "challenge": true,
+        "level_keys": [
+          "courseC_maze_programming7"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -479,6 +531,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_maze_programming8"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -500,6 +555,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_maze_programming8_predict1"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -521,6 +579,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_maze_programming9"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -542,6 +603,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_maze_programming_challenge1"
+        ]
       },
       "named_level": null,
       "bonus": true,
@@ -563,6 +627,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_maze_programming_challenge2"
+        ]
       },
       "named_level": null,
       "bonus": true,
@@ -584,6 +651,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_video_debugging"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -605,6 +675,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_maze_debugging1"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -626,6 +699,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_maze_debugging2"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -647,6 +723,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_maze_debugging3"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -668,6 +747,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_maze_debugging4"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -689,6 +771,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_maze_debugging5"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -710,6 +795,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_maze_debugging6"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -731,7 +819,10 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
-        "challenge": true
+        "challenge": true,
+        "level_keys": [
+          "courseC_maze_debugging7"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -753,6 +844,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_maze_debugging8_predict1"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -774,6 +868,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_maze_debugging9"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -795,6 +892,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_maze_debugging_challenge1"
+        ]
       },
       "named_level": null,
       "bonus": true,
@@ -816,6 +916,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_maze_debugging_challenge2"
+        ]
       },
       "named_level": null,
       "bonus": true,
@@ -837,6 +940,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "PaperPlanes"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -858,6 +964,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_video_collector"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -879,6 +988,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_collector_prog1"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -900,6 +1012,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_collector_prog2"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -921,6 +1036,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_collector_prog3"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -942,6 +1060,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_collector_prog4"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -963,6 +1084,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_collector_prog5"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -984,6 +1108,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_collector_prog6"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1005,7 +1132,10 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
-        "challenge": true
+        "challenge": true,
+        "level_keys": [
+          "courseC_collector_prog7"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1027,6 +1157,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_collector_prog8"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1048,6 +1181,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_collector_prog9"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1069,6 +1205,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "grade2_collector_A"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1090,6 +1229,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "grade2_collector_A_predict1"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1111,6 +1253,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "grade2_collector_10"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1132,6 +1277,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_collector_prog_challenge1"
+        ]
       },
       "named_level": null,
       "bonus": true,
@@ -1153,6 +1301,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_collector_prog_challenge2"
+        ]
       },
       "named_level": null,
       "bonus": true,
@@ -1174,6 +1325,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_video_artist"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1195,6 +1349,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_artist_prog1"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1216,6 +1373,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_artist_prog2"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1237,6 +1397,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_artist_prog3"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1258,6 +1421,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_artist_prog4"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1279,6 +1445,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_artist_prog5"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1300,6 +1469,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_artist_prog6"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1321,7 +1493,10 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
-        "challenge": true
+        "challenge": true,
+        "level_keys": [
+          "courseC_artist_prog7"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1343,6 +1518,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_artist_prog8"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1364,6 +1542,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_artist_prog6_predict1"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1385,6 +1566,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_artist_prog_challenge1"
+        ]
       },
       "named_level": null,
       "bonus": true,
@@ -1406,6 +1590,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_artist_prog_challenge2a"
+        ]
       },
       "named_level": null,
       "bonus": true,
@@ -1427,6 +1614,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "GettingLoopy"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1448,6 +1638,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_starWars_loops1"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1469,6 +1662,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_starWars_loops1_predict1"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1490,6 +1686,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_starWars_loops2"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1511,6 +1710,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_starWars_loops4"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1532,6 +1734,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_starWars_loops5"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1553,6 +1758,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_starWars_loops6"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1574,6 +1782,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_starWars_loops7"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1595,7 +1806,10 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
-        "challenge": true
+        "challenge": true,
+        "level_keys": [
+          "courseC_starWars_loops8"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1617,6 +1831,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_starWars_loops9"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1638,6 +1855,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_starWars_loops10"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1659,6 +1879,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_starWars_loops10_predict2"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1680,6 +1903,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_starWars_loops11"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1701,6 +1927,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_maze_loops_challenge1a"
+        ]
       },
       "named_level": null,
       "bonus": true,
@@ -1722,6 +1951,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_collector_loops_challenge2"
+        ]
       },
       "named_level": null,
       "bonus": true,
@@ -1743,6 +1975,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_artist_loopsPrePre1a"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1764,6 +1999,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_artist_loopsPre1a"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1785,6 +2023,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_artist_loop1"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1806,6 +2047,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_artist_loops1a"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1827,6 +2071,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_artist_loops2a"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1848,6 +2095,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_artist_loops3a"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1869,6 +2119,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_artist_loops4a"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1890,6 +2143,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_artist_loops5a"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1911,6 +2167,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_artist_loops5b"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1932,6 +2191,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_artist_loops6a"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1953,6 +2215,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_artist_loops7a"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1974,6 +2239,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_artist_loops8a"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -1995,6 +2263,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_harvester_loops1"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2016,6 +2287,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_harvester_loops2"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2037,6 +2311,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_harvester_loops3"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2058,6 +2335,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_harvester_loops4"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2079,6 +2359,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_harvester_loops6"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2100,6 +2383,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_harvester_loops7"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2121,6 +2407,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_harvester_loops5"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2142,7 +2431,10 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
-        "challenge": true
+        "challenge": true,
+        "level_keys": [
+          "courseC_harvester_loops8"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2164,6 +2456,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_harvester_loops9"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2185,6 +2480,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_harvester_loops10"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2206,6 +2504,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_harvester_loops11"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2227,6 +2528,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_harvester_loops11_predict1"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2248,6 +2552,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_harvester_loops_challenge1a"
+        ]
       },
       "named_level": null,
       "bonus": true,
@@ -2269,6 +2576,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_harvester_loops_challenge2"
+        ]
       },
       "named_level": null,
       "bonus": true,
@@ -2290,6 +2600,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "BigEvent"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2311,6 +2624,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_video_flappyIntro"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2332,6 +2648,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_flappy_events1"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2353,6 +2672,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_flappy_events2"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2374,6 +2696,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_flappy_events3"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2395,6 +2720,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_flappy_events4"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2416,6 +2744,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_flappy_events5"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2437,6 +2768,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_flappy_events6"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2458,6 +2792,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_flappy_events7"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2479,6 +2816,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_flappy_events8"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2500,6 +2840,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_flappy_events9"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2521,6 +2864,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_flappy_events10"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2542,6 +2888,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_PlayLab_events1"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2563,6 +2912,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_PlayLab_events2"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2584,6 +2936,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_PlayLab_events3"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2605,6 +2960,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_PlayLab_events4"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2626,6 +2984,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_PlayLab_events5"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2647,6 +3008,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_PlayLab_events6"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2668,6 +3032,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_PlayLab_events7"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2689,6 +3056,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_PlayLab_events8"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2710,6 +3080,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_PlayLab_events9"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2731,6 +3104,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_PlayLab_eventsA"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2752,6 +3128,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_PlayLab_eventsFP"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2773,6 +3152,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_PlayLab_events_challenge1"
+        ]
       },
       "named_level": null,
       "bonus": true,
@@ -2794,6 +3176,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "courseC_Unplugged_ScreenOutTheMean"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -2815,6 +3200,9 @@
       "activity_section_position": null,
       "assessment": null,
       "properties": {
+        "level_keys": [
+          "BinaryBracelets"
+        ]
       },
       "named_level": null,
       "bonus": null,
@@ -4168,6 +4556,12 @@
 
   ],
   "lessons_resources": [
+
+  ],
+  "vocabularies": [
+
+  ],
+  "lessons_vocabularies": [
 
   ],
   "objectives": [

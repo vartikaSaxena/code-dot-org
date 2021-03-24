@@ -22,14 +22,14 @@ module LevelsHelper
     elsif script_level.script.name == Script::FLAPPY_NAME
       flappy_chapter_path(script_level.chapter, params)
     elsif params[:puzzle_page]
-      if script_level.lesson.lockable?
-        puzzle_page_script_lockable_stage_script_level_path(script_level.script, script_level.lesson, script_level, params[:puzzle_page])
-      else
+      if script_level.lesson.numbered_lesson?
         puzzle_page_script_stage_script_level_path(script_level.script, script_level.lesson, script_level, params[:puzzle_page])
+      else
+        puzzle_page_script_lockable_stage_script_level_path(script_level.script, script_level.lesson, script_level, params[:puzzle_page])
       end
     elsif params[:sublevel_position]
       sublevel_script_stage_script_level_path(script_level.script, script_level.lesson, script_level, params[:sublevel_position])
-    elsif script_level.lesson.lockable?
+    elsif !script_level.lesson.numbered_lesson?
       script_lockable_stage_script_level_path(script_level.script, script_level.lesson, script_level, params)
     elsif script_level.bonus
       query_params = params.merge(level_name: script_level.level.name)
@@ -240,7 +240,7 @@ module LevelsHelper
     @app_options =
       if @level.is_a? Blockly
         blockly_options
-      elsif @level.is_a?(Weblab) || @level.is_a?(Fish) || @level.is_a?(Ailab)
+      elsif @level.is_a?(Weblab) || @level.is_a?(Fish) || @level.is_a?(Ailab) || @level.is_a?(Javalab)
         non_blockly_puzzle_options
       elsif @level.is_a?(DSLDefined) || @level.is_a?(FreeResponse) || @level.is_a?(CurriculumReference)
         question_options
@@ -310,7 +310,8 @@ module LevelsHelper
     use_gamelab = @level.is_a?(Gamelab)
     use_weblab = @level.game == Game.weblab
     use_phaser = @level.game == Game.craft
-    use_blockly = !use_droplet && !use_netsim && !use_weblab
+    use_javalab = @level.is_a?(Javalab)
+    use_blockly = !use_droplet && !use_netsim && !use_weblab && !use_javalab
     use_p5 = @level.is_a?(Gamelab)
     hide_source = app_options[:hideSource]
     use_google_blockly = @level.is_a?(Flappy) || view_options[:useGoogleBlockly]
@@ -471,6 +472,10 @@ module LevelsHelper
   def azure_speech_service_options
     return {} unless @level.game.use_azure_speech_service?
     {voices: AzureTextToSpeech.get_voices || {}}
+  end
+
+  def disallowed_html_tags
+    DCDO.get('disallowed_html_tags', ['script', 'iframe'])
   end
 
   # Options hash for Blockly
