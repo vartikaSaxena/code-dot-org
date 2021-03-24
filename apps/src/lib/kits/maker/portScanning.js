@@ -79,6 +79,9 @@ function listSerialDevices() {
     return SerialPortType.list();
   } else {
     SerialPortType = ChromeSerialPort;
+    console.log(ChromeSerialPort);
+    console.log(ChromeSerialPort.SerialPort);
+    console.log(SerialPortType);
     return new Promise((resolve, reject) => {
       SerialPortType.list((error, list) =>
         error ? reject(error) : resolve(list)
