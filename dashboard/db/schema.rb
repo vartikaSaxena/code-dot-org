@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_27_012046) do
+ActiveRecord::Schema.define(version: 2021_03_31_171524) do
 
   create_table "activities", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
     t.integer "user_id"
@@ -233,8 +233,9 @@ ActiveRecord::Schema.define(version: 2021_03_27_012046) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer "storage_id", null: false
+    t.integer "script_id"
     t.index ["storage_app_id"], name: "index_channel_tokens_on_storage_app_id"
-    t.index ["storage_id", "level_id"], name: "index_channel_tokens_on_storage_id_and_level_id", unique: true
+    t.index ["storage_id", "level_id", "script_id"], name: "index_channel_tokens_on_storage_id_and_level_id_and_script_id", unique: true
     t.index ["storage_id"], name: "index_channel_tokens_on_storage_id"
   end
 
