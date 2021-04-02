@@ -46,6 +46,7 @@ export default class GoogleChart {
   loadDependencies() {
     return new Promise((resolve, reject) => {
       try {
+        console.log('hello');
         GoogleChart.lib.load('visualization', '1', {
           packages: this.getDependencies(),
           callback: resolve

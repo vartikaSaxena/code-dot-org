@@ -82,7 +82,8 @@ class GoogleChartWrapper extends React.Component {
         break;
       case ChartType.HISTOGRAM:
         if (this.props.selectedColumn1 && this.props.bucketSize) {
-          options.histogram = {bucketSize: this.props.bucketSize};
+          console.log(this.props.bucketSize);
+          options.histogram = {bucketSize: 30}; //parseInt(this.props.bucketSize)};
           chart = new GoogleChart.Histogram(this.chartArea);
           chartData = ignoreMissingValues(this.props.records, [
             this.props.selectedColumn1
@@ -91,6 +92,8 @@ class GoogleChartWrapper extends React.Component {
           options.hAxis.titleTextStyle = {italic: false};
           options.vAxis.title = msg.count();
           options.vAxis.titleTextStyle = {italic: false};
+          options.hAxis.type = 'category';
+          options.chartArea = {width: 1200};
           columns = [this.props.selectedColumn1];
         }
         break;
