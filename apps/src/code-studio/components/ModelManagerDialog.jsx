@@ -4,6 +4,7 @@ import $ from 'jquery';
 import BaseDialog from '@cdo/apps/templates/BaseDialog';
 import Button from '@cdo/apps/templates/Button';
 import ModelCard from './ModelCard';
+import designMode from '../../applab/designMode';
 
 const styles = {
   left: {
@@ -61,6 +62,8 @@ export default class ModelManagerDialog extends React.Component {
   importMLModel = async () => {
     this.setState({isImportPending: true});
     const modelId = this.root.value;
+    var newScreenId = designMode.createScreen();
+    designMode.changeScreen(newScreenId);
     await this.props.autogenerateML(modelId);
     this.setState({isImportPending: false});
     this.closeModelManager();
