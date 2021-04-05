@@ -7,4 +7,6 @@
 #  resource_id   :integer
 #
 class UnitGroupStudentResource < ApplicationRecord
+  belongs_to :unit_group
+  belongs_to :resource
 end

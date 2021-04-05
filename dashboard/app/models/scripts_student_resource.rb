@@ -7,4 +7,6 @@
 #  resource_id :integer
 #
 class ScriptsStudentResource < ApplicationRecord
+  belongs_to :script
+  belongs_to :resource
 end
